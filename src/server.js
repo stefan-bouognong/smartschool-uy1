@@ -1,13 +1,25 @@
 const app = require('./app');
 const config = require('./config/env');
-const initDb = require('./config/initDb');
+const { sequelize } = require('./database/models');
 
 const startServer = async () => {
-  await initDb(); // 🔥 création DB automatique
+  try {
+    // 🔥 Connexion DB
+    await sequelize.authenticate();
+    console.log("📦 Connexion à la base OK");
 
-  app.listen(config.port, () => {
-    console.log(`🚀 Server running on port ${config.port}`);
-  });
+    // 🔥 Création des tables automatiquement
+    await sequelize.sync({ alter: true });
+    console.log("✅ Tables synchronisées");
+
+    // 🚀 Lancement serveur
+    app.listen(config.port, () => {
+      console.log(`🚀 Server running on port ${config.port}`);
+    });
+
+  } catch (error) {
+    console.error("❌ Erreur démarrage:", error);
+  }
 };
 
 startServer();

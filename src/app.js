@@ -1,11 +1,16 @@
 const express = require('express');
+const cors = require('cors');
+
 const app = express();
 
+// Middlewares globaux
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// test endpoint
+// Route test
 app.get('/', (req, res) => {
-  res.json({ message: "SmartSchool API running" });
+  res.json({ message: 'SmartSchool API running' });
 });
 
 module.exports = app;

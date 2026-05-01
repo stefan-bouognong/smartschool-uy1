@@ -1,1 +1,0 @@
-# smartschool-uy1
