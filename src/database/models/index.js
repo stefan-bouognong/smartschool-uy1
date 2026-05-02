@@ -10,6 +10,10 @@ const UE = require('./ue.model');
 const Note = require('./note.model');
 const Tranche = require('./tranche.model');
 const PayerTranche = require('./payerTranche.model');
+const Annee = require('./annee.model');
+const Niveau = require('./niveau.model');
+const Departement = require('./departement.model');
+const Etablissement = require('./etablissement.model');
 
 // ================= RELATIONS =================
 
@@ -18,6 +22,11 @@ Utilisateur.belongsTo(Enseignant, { foreignKey: 'id_enseignant' });
 
 // Inscription relations
 Inscription.belongsTo(Etudiant, { foreignKey: 'id_etudiant' });
+Inscription.belongsTo(Annee, { foreignKey: 'id_annee' });
+Inscription.belongsTo(Niveau, { foreignKey: 'id_niveau' });
+
+// UE relations
+UE.belongsTo(Niveau, { foreignKey: 'id_niveau' });
 
 // Note relations
 Note.belongsTo(Inscription, { foreignKey: 'id_inscription' });
@@ -37,5 +46,9 @@ module.exports = {
   UE,
   Note,
   Tranche,
-  PayerTranche
+  PayerTranche,
+  Annee,
+  Niveau,
+  Departement,
+  Etablissement
 };
