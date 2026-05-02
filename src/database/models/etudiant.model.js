@@ -1,6 +1,4 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/database');
-
+module.exports = (sequelize, DataTypes)=>{
 const Etudiant = sequelize.define('Etudiant', {
   id_etudiant: {
     type: DataTypes.INTEGER,
@@ -19,4 +17,9 @@ const Etudiant = sequelize.define('Etudiant', {
   timestamps: false
 });
 
-module.exports = Etudiant;
+Etudiant.associate = (models) =>{
+  Etudiant.hasMany(models.Inscription, {foreignKey: 'id_etudiant'});
+};
+
+return Etudiant;
+};

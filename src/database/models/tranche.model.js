@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
-
+module.exports = (sequelise,DataTypes)=>{
 const Tranche = sequelize.define('Tranche', {
   id_tranche: {
     type: DataTypes.INTEGER,
@@ -15,4 +15,4 @@ const Tranche = sequelize.define('Tranche', {
   timestamps: false
 });
 
-module.exports = Tranche;
+return Tranche;};

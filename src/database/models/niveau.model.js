@@ -1,6 +1,4 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/database');
-
+module.exports=(sequelize, DataTypes)=>{
 const Niveau = sequelize.define('Niveau', {
   id_niveau: {
     type: DataTypes.INTEGER,
@@ -17,4 +15,11 @@ const Niveau = sequelize.define('Niveau', {
   timestamps: false
 });
 
-module.exports = Niveau;
+Niveau.associate = (models)=>{
+  Niveau.belongsTo(models.Departement, { foreignKey: 'id_departement'});
+  Niveau.hasMany(models.Inscription,{foreignKey:'id_niveau'});
+};
+
+return Niveau;
+
+};

@@ -1,41 +1,22 @@
+
+'use strict';
+const fs = require('fs');
+const path = require('path');
 const Sequelize = require('sequelize');
 const sequelize = require('../../config/database');
-
-// Import modèles
-const Utilisateur = require('./utilisateur.model');
-const Enseignant = require('./enseignant.model');
-const Etudiant = require('./etudiant.model');
-const Inscription = require('./inscription.model');
-const UE = require('./ue.model');
-const Note = require('./note.model');
-const Tranche = require('./tranche.model');
-const PayerTranche = require('./payerTranche.model');
-
-// ================= RELATIONS =================
-
-// Utilisateur → Enseignant
-Utilisateur.belongsTo(Enseignant, { foreignKey: 'id_enseignant' });
-
-// Inscription relations
-Inscription.belongsTo(Etudiant, { foreignKey: 'id_etudiant' });
-
-// Note relations
-Note.belongsTo(Inscription, { foreignKey: 'id_inscription' });
-Note.belongsTo(UE, { foreignKey: 'id_UE' });
-Note.belongsTo(Enseignant, { foreignKey: 'id_enseignant' });
-
-// Paiement
-PayerTranche.belongsTo(Inscription, { foreignKey: 'id_inscription' });
-PayerTranche.belongsTo(Tranche, { foreignKey: 'id_tranche' });
-
-module.exports = {
-  sequelize,
-  Utilisateur,
-  Enseignant,
-  Etudiant,
-  Inscription,
-  UE,
-  Note,
-  Tranche,
-  PayerTranche
-};
+const basename = path.basename(__filename);
+const db = {};
+fs.readdirSync(__dirname)
+.filter(file => file.indexOf('.')!== 0 && file!== basename && file.slice(-9) === '.model.js')
+.forEach(file => {
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    db[model.name] = model;
+  });
+Object.keys(db).forEach(modelName => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+module.exports = db;
