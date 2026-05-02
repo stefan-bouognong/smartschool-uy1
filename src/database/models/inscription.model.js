@@ -5,10 +5,6 @@ const Inscription = sequelize.define('Inscription', {
     autoIncrement: true,
     primaryKey: true
   },
-  matricule: {
-    type: DataTypes.STRING,
-    unique: true
-  },
   date_inscription: DataTypes.DATE,
   statut_paiement: {
     type: DataTypes.BOOLEAN,
