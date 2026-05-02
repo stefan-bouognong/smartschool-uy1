@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 
 module.exports = {
   port: process.env.PORT || 5000,
@@ -8,5 +8,6 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
   },
-  jwtSecret: process.env.JWT_SECRET
+  jwtSecret: process.env.JWT_SECRET,
+  paymentThreshold: Number(process.env.PENSION_PAYMENT_THRESHOLD || 100),
 };
