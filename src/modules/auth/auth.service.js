@@ -23,7 +23,13 @@ exports.register = async (data) => {
     id_enseignant: data.id_enseignant || null
   });
 
-  return user;
+  return {
+  id: user.id_utilisateur,
+  nom: user.nom,
+  prenom: user.prenom,
+  email: user.email,
+  role: user.role
+  };
 };
 
 exports.login = async (email, password) => {
@@ -48,5 +54,10 @@ exports.login = async (email, password) => {
     { expiresIn: '1d' }
   );
 
-  return { user, token };
+  return {   id: user.id_utilisateur,
+  nom: user.nom,
+  prenom: user.prenom,
+  email: user.email,
+  role: user.role, token
+  }
 };
