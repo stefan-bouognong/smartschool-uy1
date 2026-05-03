@@ -354,118 +354,118 @@ function generateRelevePdf(reportData, res) {
 }
 
 // ─── Génération du certificat de scolarité ───────────────────────────────────
-function generateCertificatePdf(reportData, res) {
-  const doc = new PDFDocument({
-    size: "A4",
-    margin: 40,
-    info: {
-      Title: "Certificat de Scolarité",
-      Author: "Université de Yaoundé I",
-      Subject: `Certificat de scolarité – ${reportData.student.matricule}`,
-    },
-  });
+// function generateCertificatePdf(reportData, res) {
+//   const doc = new PDFDocument({
+//     size: "A4",
+//     margin: 40,
+//     info: {
+//       Title: "Certificat de Scolarité",
+//       Author: "Université de Yaoundé I",
+//       Subject: `Certificat de scolarité – ${reportData.student.matricule}`,
+//     },
+//   });
 
-  const pageW = doc.page.width;
-  const margin = 40;
-  const s = reportData.student;
-  const i = reportData.inscription;
-  const p = reportData.payments;
+//   const pageW = doc.page.width;
+//   const margin = 40;
+//   const s = reportData.student;
+//   const i = reportData.inscription;
+//   const p = reportData.payments;
 
-  const nomEtablissement = i.etablissement || "UNIVERSITÉ DE YAOUNDÉ I";
+//   const nomEtablissement = i.etablissement || "UNIVERSITÉ DE YAOUNDÉ I";
 
-  // ── En-tête
-  drawOfficialHeader(doc, nomEtablissement, "CERTIFICAT DE SCOLARITÉ");
+//   // ── En-tête
+//   drawOfficialHeader(doc, nomEtablissement, "CERTIFICAT DE SCOLARITÉ");
 
-  // ── Accroche officielle
-  doc.moveDown(0.5);
-  doc.font("Helvetica-Bold").fontSize(10).fillColor("#000000");
-  doc.text(
-    `Le Chef du Département de ${i.departement || "N/A"} de ${nomEtablissement}`,
-    margin,
-    doc.y,
-    { align: "center", width: pageW - margin * 2 },
-  );
-  doc.moveDown(0.3);
-  doc.font("Helvetica").fontSize(9);
-  doc.text("certifie que l'étudiant(e) :", margin, doc.y, {
-    align: "center",
-    width: pageW - margin * 2,
-  });
+//   // ── Accroche officielle
+//   doc.moveDown(0.5);
+//   doc.font("Helvetica-Bold").fontSize(10).fillColor("#000000");
+//   doc.text(
+//     `Le Chef du ${i.departement || "N/A"} de la ${nomEtablissement}`,
+//     margin,
+//     doc.y,
+//     { align: "center", width: pageW - margin * 2 },
+//   );
+//   doc.moveDown(0.3);
+//   doc.font("Helvetica").fontSize(9);
+//   doc.text("certifie que l'étudiant(e) :", margin, doc.y, {
+//     align: "center",
+//     width: pageW - margin * 2,
+//   });
 
-  // ── Encadré identité étudiant
-  doc.moveDown(0.6);
-  const boxY = doc.y;
-  const boxW = pageW - margin * 2 - 80;
-  const boxX = margin + 40;
-  const boxH = 62;
+//   // ── Encadré identité étudiant
+//   doc.moveDown(0.6);
+//   const boxY = doc.y;
+//   const boxW = pageW - margin * 2 - 80;
+//   const boxX = margin + 40;
+//   const boxH = 62;
 
-  doc.rect(boxX, boxY, boxW, boxH).stroke("#000000");
+//   doc.rect(boxX, boxY, boxW, boxH).stroke("#000000");
 
-  doc.font("Helvetica-Bold").fontSize(13).fillColor("#000000");
-  doc.text(`${s.nom.toUpperCase()} ${s.prenom}`, boxX, boxY + 10, {
-    width: boxW,
-    align: "center",
-  });
+//   doc.font("Helvetica-Bold").fontSize(13).fillColor("#000000");
+//   doc.text(`${s.nom.toUpperCase()} ${s.prenom}`, boxX, boxY + 10, {
+//     width: boxW,
+//     align: "center",
+//   });
 
-  doc.font("Helvetica").fontSize(9);
-  doc.text(
-    `Matricule : ${s.matricule}     |     Né(e) le : ${formatDate(s.date_naissance)}`,
-    boxX,
-    boxY + 30,
-    { width: boxW, align: "center" },
-  );
+//   doc.font("Helvetica").fontSize(9);
+//   doc.text(
+//     `Matricule : ${s.matricule}     |     Né(e) le : ${formatDate(s.date_naissance)}`,
+//     boxX,
+//     boxY + 30,
+//     { width: boxW, align: "center" },
+//   );
 
-  doc.font("Helvetica-Bold").fontSize(9);
-  doc.text(
-    `Département : ${i.departement || "N/A"}   –   ${i.niveau || "N/A"}`,
-    boxX,
-    boxY + 48,
-    { width: boxW, align: "center" },
-  );
+//   doc.font("Helvetica-Bold").fontSize(9);
+//   doc.text(
+//     `${i.departement || "N/A"}   –   ${i.niveau || "N/A"}`,
+//     boxX,
+//     boxY + 48,
+//     { width: boxW, align: "center" },
+//   );
 
-  doc.y = boxY + boxH + 20;
+//   doc.y = boxY + boxH + 20;
 
-  // ── Corps du certificat
-  doc.font("Helvetica").fontSize(10).fillColor("#000000").lineGap(5);
-  doc.text(
-    `est régulièrement inscrit(e) à ${nomEtablissement} pour l'année académique ${i.annee_scolaire || "N/A"}.`,
-    margin,
-    doc.y,
-    { width: pageW - margin * 2, align: "justify" },
-  );
+//   // ── Corps du certificat
+//   doc.font("Helvetica").fontSize(10).fillColor("#000000").lineGap(5);
+//   doc.text(
+//     `est régulièrement inscrit(e) en ${nomEtablissement} pour l'année académique ${i.annee_scolaire || "N/A"}.`,
+//     margin,
+//     doc.y,
+//     { width: pageW - margin * 2, align: "justify" },
+//   );
 
-  doc.moveDown(0.6);
-  doc.text(
-    "Le présent certificat est délivré à l'intéressé(e) pour servir et valoir ce que de droit, notamment dans toute démarche administrative, bancaire ou académique.",
-    margin,
-    doc.y,
-    { width: pageW - margin * 2, align: "justify" },
-  );
+//   doc.moveDown(0.6);
+//   doc.text(
+//     "Le présent certificat est délivré à l'intéressé(e) pour servir et valoir ce que de droit, notamment dans toute démarche administrative, bancaire ou académique.",
+//     margin,
+//     doc.y,
+//     { width: pageW - margin * 2, align: "justify" },
+//   );
 
-  // ── Statut paiement
-  doc.moveDown(0.8);
-  const statusLabel = p.isEligible ? "À JOUR" : "INSUFFISANT";
-  const statusColor = p.isEligible ? "#1A7A1A" : "#CC0000";
+//   // ── Statut paiement
+//   doc.moveDown(0.8);
+//   const statusLabel = p.isEligible ? "À JOUR" : "INSUFFISANT";
+//   const statusColor = p.isEligible ? "#1A7A1A" : "#CC0000";
 
-  doc.font("Helvetica").fontSize(9).fillColor("#000000");
-  doc.text("Statut de la scolarité : ", margin, doc.y, { continued: true });
-  doc.font("Helvetica-Bold").fillColor(statusColor).text(statusLabel);
-  doc.fillColor("#000000");
+//   doc.font("Helvetica").fontSize(9).fillColor("#000000");
+//   doc.text("Statut de la scolarité : ", margin, doc.y, { continued: true });
+//   doc.font("Helvetica-Bold").fillColor(statusColor).text(statusLabel);
+//   doc.fillColor("#000000");
 
-  doc.moveDown(0.4);
-  doc.font("Helvetica").fontSize(8).fillColor("#555555");
-  doc.text(`Document généré le ${formatDate(new Date())}`, margin, doc.y, {
-    align: "right",
-  });
+//   // ── Pied de page (réutilise le même footer que le relevé)
+//   doc.fillColor("#000000");
+//   drawFooter(doc, "Le Président du Jury");
 
-  // ── Pied de page (réutilise le même footer que le relevé)
-  doc.fillColor("#000000");
-  drawFooter(doc, "Le Président du Jury");
+//   doc.moveDown(0.4);
+//   doc.font("Helvetica").fontSize(8).fillColor("#555555");
+//   doc.text(`Document imprimé le ${formatDate(new Date())}`, margin, doc.y, {
+//     align: "center",
+//   });
 
-  pipePdf(res, doc, `certificat_${s.matricule || s.id_etudiant}.pdf`);
-}
+//   pipePdf(res, doc, `certificat_${s.matricule || s.id_etudiant}.pdf`);
+// }
 
 module.exports = {
   generateRelevePdf,
-  generateCertificatePdf,
+  // generateCertificatePdf,
 };
