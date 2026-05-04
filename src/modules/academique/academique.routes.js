@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('./academique.controller');
-const auth = require('../auth/auth.middleware');
+// const auth = require('../auth/auth.middleware');
 
-router.use(auth);
+// router.use(auth);
 
 router.post('/ue', controller.creerUE);
 router.get('/ue', controller.listerUEs);
