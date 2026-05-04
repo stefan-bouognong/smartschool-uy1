@@ -5,13 +5,17 @@ const morgan = require('morgan');
 
 const reportingRoutes = require("./modules/reporting/reporting.routes");
 
+const financeRoutes = require('./modules/finance/finance.routes');
 
 const app = express();
 
-// Middlewares globaux
+const morganFormat = process.env.NODE_ENV === 'production' ? 'combined' : 'dev';
+app.use(morgan(morganFormat));
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 app.use(morgan('dev'));
 
@@ -27,6 +31,9 @@ app.use('/api/auth', require('./modules/auth/auth.routes'));
 // Routes du module Admin
 const adminRoutes = require('./modules/admin/admin.routes');
 app.use('/api/admin', adminRoutes);
+
+app.use('/finance', financeRoutes);
+
 // Route test
 app.get("/", (req, res) => {
   res.json({ message: "SmartSchool API running" });
