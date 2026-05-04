@@ -5,12 +5,12 @@ const { sequelize } = require('./database/models');
 const startServer = async () => {
   try {
     // 🔥 Connexion DB
-    await sequelize.authenticate();
+    // await sequelize.authenticate();
     console.log("📦 Connexion à la base OK");
 
     // 🔥 Création des tables automatiquement
-    await sequelize.sync({ alter: true });
-    console.log("✅ Tables synchronisées");
+    // await sequelize.sync({ alter: true });
+    // console.log("✅ Tables synchronisées");
 
     // 🚀 Lancement serveur
     app.listen(config.port, () => {
