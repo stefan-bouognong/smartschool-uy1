@@ -16,6 +16,10 @@ const academiqueRoutes = require('./modules/academique/academique.routes');
 
 app.use('/api/auth', require('./modules/auth/auth.routes'));
 
+
+// Routes du module Admin
+const adminRoutes = require('./modules/admin/admin.routes');
+app.use('/api/admin', adminRoutes);
 // Route test
 app.get('/', (req, res) => {
   res.json({ message: 'SmartSchool API running' });
