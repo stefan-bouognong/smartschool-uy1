@@ -1,20 +1,17 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
-module.exports = (sequelize,DataTypes)=>{
 const UE = sequelize.define('UE', {
-  id_UE: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
-  code_UE: DataTypes.STRING,
-  libelle_UE: DataTypes.STRING,
-  credits_ECTS: DataTypes.INTEGER,
-  id_niveau: DataTypes.INTEGER
+id_UE: {
+type: DataTypes.INTEGER,
+autoIncrement: true,
+primaryKey: true
+},
+code_UE: DataTypes.STRING,
+libelle_UE: DataTypes.STRING,
+credits_ECTS: DataTypes.INTEGER,
+id_niveau: DataTypes.INTEGER
 }, {
-  tableName: 'UE',
-  timestamps: false
+tableName: 'UE',
+timestamps: false
 });
-
-return UE;
-}
+module.exports = UE;
