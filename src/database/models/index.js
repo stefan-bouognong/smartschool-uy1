@@ -15,6 +15,9 @@ const Annee = require("./annee.model");
 const Niveau = require("./niveau.model");
 const Etablissement = require("./etablissement.model");
 
+
+
+
 // ================= RELATIONS =================
 
 // Utilisateur → Enseignant
@@ -61,6 +64,12 @@ PayerTranche.belongsTo(Tranche, { foreignKey: "id_tranche" });
 Inscription.hasMany(PayerTranche, { foreignKey: "id_inscription" });
 Tranche.hasMany(PayerTranche, { foreignKey: "id_tranche" });
 
+
+//annee
+Annee.hasMany(Inscription, { foreignKey: 'id_annee' });
+
+
+
 module.exports = {
   sequelize,
   Utilisateur,
@@ -76,4 +85,7 @@ module.exports = {
   Departement,
   Etablissement
 
+
 };
+
+

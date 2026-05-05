@@ -9,6 +9,7 @@ const financeRoutes = require('./modules/finance/finance.routes');
 
 const app = express();
 
+
 const morganFormat = process.env.NODE_ENV === 'production' ? 'combined' : 'dev';
 app.use(morgan(morganFormat));
 
@@ -33,6 +34,12 @@ const adminRoutes = require('./modules/admin/admin.routes');
 app.use('/api/admin', adminRoutes);
 
 app.use('/finance', financeRoutes);
+
+
+const scolariteRoutes = require('./modules/scolarite/scolarite.routes');
+// Middlewares globaux
+
+app.use('/api/scolarite', scolariteRoutes);
 
 // Route test
 app.get("/", (req, res) => {
