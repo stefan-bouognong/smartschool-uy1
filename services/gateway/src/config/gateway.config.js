@@ -1,13 +1,14 @@
-require('dotenv').config();
+require("dotenv").config();
 
 module.exports = {
   port: process.env.PORT || 8000,
-  jwtSecret: process.env.JWT_SECRET || 'secret_par_defaut_smartschool_uy1',
+  jwtSecret: process.env.JWT_SECRET || "secret_par_defaut_smartschool_uy1",
   services: {
-    auth: process.env.AUTH_SERVICE_URL || 'http://localhost:5000',
-    students: process.env.STUDENT_SERVICE_URL || 'http://localhost:5000',
-    academic: process.env.ACADEMIC_SERVICE_URL || 'http://localhost:5000',
-    finance: process.env.FINANCE_SERVICE_URL || 'http://localhost:5000',
-    reporting: process.env.REPORTING_SERVICE_URL || 'http://localhost:5000'
-  }
+    auth: process.env.AUTH_SERVICE_URL || "http://localhost:5001",
+    scolarite: process.env.SCOLARITE_SERVICE_URL || "http://localhost:5002",
+    academique: process.env.ACADEMIC_SERVICE_URL || "http://localhost:5003",
+    finance: process.env.FINANCE_SERVICE_URL || "http://localhost:5004",
+    reporting: process.env.REPORTING_SERVICE_URL || "http://localhost:5005",
+    admin: process.env.ADMIN_SERVICE_URL || "http://localhost:5006",
+  },
 };
