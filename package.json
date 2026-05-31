@@ -1,40 +1,33 @@
 {
-  "name": "smartschool-uy1",
+  "name": "smartschool-uy1-monorepo",
   "version": "1.0.0",
-  "description": "SmartSchool ORM backend",
-  "main": "src/server.js",
+  "description": "SmartSchool UY1 Backend Enterprise Monorepo",
+  "private": true,
+  "workspaces": [
+    "services/*"
+  ],
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "seed": "node src/database/seed.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/stefan-bouognong/smartschool-uy1.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/stefan-bouognong/smartschool-uy1/issues"
-  },
-  "homepage": "https://github.com/stefan-bouognong/smartschool-uy1#readme",
-  "dependencies": {
-    "@kangopenbanking/sdk": "^1.1.2",
-    "axios": "^1.16.0",
-    "bcryptjs": "^3.0.3",
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "morgan": "^1.10.1",
-    "mysql2": "^3.22.3",
-    "sequelize": "^6.37.8",
-    "pdfkit": "^0.13.0"
+    "install:all": "npm install",
+    "dev:auth": "npm run dev --workspace=services/auth",
+    "dev:academic": "npm run dev --workspace=services/academic",
+    "dev:student": "npm run dev --workspace=services/student",
+    "dev:finance": "npm run dev --workspace=services/finance",
+    "dev:reporting": "npm run dev --workspace=services/reporting",
+    "dev:admin": "npm run dev --workspace=services/admin",
+    "dev:gateway": "npm run dev --workspace=services/gateway",
+    "dev:all": "concurrently \"npm run dev:auth\" \"npm run dev:academic\" \"npm run dev:student\" \"npm run dev:finance\" \"npm run dev:reporting\" \"npm run dev:admin\" \"npm run dev:gateway\"",
+    "start:auth": "npm run start --workspace=services/auth",
+    "start:academic": "npm run start --workspace=services/academic",
+    "start:student": "npm run start --workspace=services/student",
+    "start:finance": "npm run start --workspace=services/finance",
+    "start:reporting": "npm run start --workspace=services/reporting",
+    "start:admin": "npm run start --workspace=services/admin",
+    "start:gateway": "npm run start --workspace=services/gateway",
+    "start:all": "concurrently \"npm run start:auth\" \"npm run start:academic\" \"npm run start:student\" \"npm run start:finance\" \"npm run start:reporting\" \"npm run start:admin\" \"npm run start:gateway\"",
+    "test:endpoints": "bash scripts/test_all_endpoints.sh",
+    "launch:test": "bash scripts/launch_services_and_tests.sh"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "concurrently": "^8.2.2"
   }
 }

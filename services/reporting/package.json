@@ -1,0 +1,20 @@
+{
+  "name": "@smartschool/reporting-service",
+  "version": "1.0.0",
+  "description": "SmartSchool UY1 Reporting, MGP/GPA & Transcript PDF Microservice",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "axios": "^1.16.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pdfkit": "^0.18.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
