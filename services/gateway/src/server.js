@@ -18,9 +18,10 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.use(express.json());
+// Ne pas parser le corps JSON dans la gateway :
+// Le proxy doit transmettre les flux HTTP bruts aux microservices cibles.
+// La gateway n'a pas besoin d'analyser le corps pour l'instant.
 
-// Logger de requêtes simple sur la Gateway
 app.use((req, res, next) => {
   console.log(
     `[Gateway Log] [${new Date().toISOString()}] ${req.method} ${req.url}`,
@@ -82,6 +83,37 @@ const proxyRoutes = [
   },
 ];
 
+// Helper to forward JSON body through the proxy when express.json() already consumed the request stream
+const proxyOptions = (route) => ({
+  target: route.target,
+  changeOrigin: true,
+  pathRewrite: route.rewrite,
+  proxyTimeout: 15000,
+  timeout: 15000,
+  onProxyReq: (proxyReq, req) => {
+    // Propagation des en-têtes avec métadonnées de l'utilisateur validé
+    if (req.user) {
+      proxyReq.setHeader("X-User-Id", req.user.id);
+      proxyReq.setHeader("X-User-Role", req.user.role);
+      proxyReq.setHeader("X-User-Email", req.user.email);
+    }
+  },
+  onProxyRes: (proxyRes, req, res) => {
+    console.log(
+      `[Gateway Proxy] ${req.method} ${req.url} -> ${route.target}${req.url} ${proxyRes.statusCode}`,
+    );
+  },
+  onError: (err, req, res) => {
+    console.error(`❌ Erreur Proxy pour ${route.path} -> ${route.target} :`, err.message);
+    if (!res.headersSent) {
+      res.status(502).json({
+        success: false,
+        message: "Le microservice cible est temporairement injoignable (Bad Gateway).",
+      });
+    }
+  },
+});
+
 // 3. Application dynamique du proxying avec validation de sécurité
 proxyRoutes.forEach((route) => {
   const middlewares = [];
@@ -90,34 +122,7 @@ proxyRoutes.forEach((route) => {
     middlewares.push(authorize(route.roles));
   }
 
-  app.use(
-    route.path,
-    ...middlewares,
-    createProxyMiddleware({
-      target: route.target,
-      changeOrigin: true,
-      pathRewrite: route.rewrite,
-      onProxyReq: (proxyReq, req) => {
-        // Propagation des en-têtes avec métadonnées de l'utilisateur validé
-        if (req.user) {
-          proxyReq.setHeader("X-User-Id", req.user.id);
-          proxyReq.setHeader("X-User-Role", req.user.role);
-          proxyReq.setHeader("X-User-Email", req.user.email);
-        }
-      },
-      onError: (err, req, res) => {
-        console.error(
-          `❌ Erreur Proxy pour ${route.path} -> ${route.target} :`,
-          err.message,
-        );
-        res.status(502).json({
-          success: false,
-          message:
-            "Le microservice cible est temporairement injoignable (Bad Gateway).",
-        });
-      },
-    }),
-  );
+  app.use(route.path, ...middlewares, createProxyMiddleware(proxyOptions(route)));
 });
 
 // Middleware fallback 404

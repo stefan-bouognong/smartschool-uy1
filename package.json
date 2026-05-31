@@ -8,11 +8,24 @@
   ],
   "scripts": {
     "install:all": "npm install",
-    "dev:monolith": "npm run dev --workspace=services/monolith",
+    "dev:auth": "npm run dev --workspace=services/auth",
+    "dev:academic": "npm run dev --workspace=services/academic",
+    "dev:student": "npm run dev --workspace=services/student",
+    "dev:finance": "npm run dev --workspace=services/finance",
+    "dev:reporting": "npm run dev --workspace=services/reporting",
+    "dev:admin": "npm run dev --workspace=services/admin",
     "dev:gateway": "npm run dev --workspace=services/gateway",
-    "dev:all": "concurrently \"npm run dev:monolith\" \"npm run dev:gateway\"",
-    "start:monolith": "npm run start --workspace=services/monolith",
-    "start:gateway": "npm run start --workspace=services/gateway"
+    "dev:all": "concurrently \"npm run dev:auth\" \"npm run dev:academic\" \"npm run dev:student\" \"npm run dev:finance\" \"npm run dev:reporting\" \"npm run dev:admin\" \"npm run dev:gateway\"",
+    "start:auth": "npm run start --workspace=services/auth",
+    "start:academic": "npm run start --workspace=services/academic",
+    "start:student": "npm run start --workspace=services/student",
+    "start:finance": "npm run start --workspace=services/finance",
+    "start:reporting": "npm run start --workspace=services/reporting",
+    "start:admin": "npm run start --workspace=services/admin",
+    "start:gateway": "npm run start --workspace=services/gateway",
+    "start:all": "concurrently \"npm run start:auth\" \"npm run start:academic\" \"npm run start:student\" \"npm run start:finance\" \"npm run start:reporting\" \"npm run start:admin\" \"npm run start:gateway\"",
+    "test:endpoints": "bash scripts/test_all_endpoints.sh",
+    "launch:test": "bash scripts/launch_services_and_tests.sh"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

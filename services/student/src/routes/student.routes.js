@@ -7,6 +7,7 @@ router.post('/inscrire', studentController.inscrireEtudiant);
 router.get('/inscriptions', studentController.getAllInscriptions);
 router.get('/inscriptions/:id', studentController.getInscription);
 router.delete('/inscriptions/:id', studentController.deleteInscription);
+router.post('/internal/etudiants', studentController.createOrUpdateEtudiant);
 
 // Endpoint interne (Scolarité/Paiements)
 router.put('/internal/inscriptions/:id_inscription/paiement', studentController.updatePaiementStatut);

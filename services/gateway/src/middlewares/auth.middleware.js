@@ -20,8 +20,11 @@ const authorize = (allowedRoles = []) => {
       const decoded = jwt.verify(token, config.jwtSecret);
       req.user = decoded; // Injecte { id, role, email }
 
-      // Vérification du rôle RBAC
-      if (allowedRoles.length > 0 && !allowedRoles.includes(decoded.role)) {
+      // Vérification du rôle RBAC (insensible à la casse)
+      const userRole = String(decoded.role || '').toLowerCase();
+      const authorizedRoles = allowedRoles.map((role) => String(role).toLowerCase());
+      if (allowedRoles.length > 0 && !authorizedRoles.includes(userRole)) {
+        console.error(`[Gateway Auth] refused role=${decoded.role} normalized=${userRole} allowed=${authorizedRoles.join(',')}`);
         return res.status(403).json({
           success: false,
           message: 'Permissions insuffisantes pour accéder à cette ressource.'

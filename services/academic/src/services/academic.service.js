@@ -1,4 +1,5 @@
 const { Etablissement, Departement, Niveau, UE, Enseignant, Note } = require('../database/models');
+const studentClient = require('../clients/studentClient');
 
 // ─── VALIDATION INTERNE DE LA HIÉRARCHIE ───────────────────────────────────
 exports.validateHierarchy = async (filiere, niveau) => {
@@ -21,6 +22,16 @@ exports.validateHierarchy = async (filiere, niveau) => {
     nom_dept: dept.nom_dept,
     libelle_niveau: niv.libelle_niveau
   };
+};
+
+exports.syncStudentToScolarite = async (studentData) => {
+  try {
+    const response = await studentClient.post('/api/scolarite/internal/etudiants', studentData);
+    return response.data;
+  } catch (err) {
+    console.error('❌ Erreur de communication avec le service Scolarité :', err.response?.data || err.message);
+    throw new Error(`Échec de la synchronisation vers Scolarité : ${err.response?.data?.error || err.message}`);
+  }
 };
 
 // ─── CRUDS DES NOTES D'EXAMENS ──────────────────────────────────────────────

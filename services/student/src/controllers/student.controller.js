@@ -70,6 +70,23 @@ exports.deleteInscription = async (req, res) => {
   }
 };
 
+exports.createOrUpdateEtudiant = async (req, res) => {
+  try {
+    const data = await studentService.createOrUpdateEtudiant(req.body);
+    return res.status(200).json({
+      success: true,
+      message: 'Étudiant synchronisé dans le service Scolarité',
+      data
+    });
+  } catch (err) {
+    console.error('❌ Erreur synchronisation étudiant:', err.message);
+    return res.status(400).json({
+      success: false,
+      error: err.message
+    });
+  }
+};
+
 // Endpoint à usage interne pour mettre à jour le statut du versement de pension
 exports.updatePaiementStatut = async (req, res) => {
   try {

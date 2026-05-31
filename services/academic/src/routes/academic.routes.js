@@ -5,6 +5,10 @@ const router = express.Router();
 
 // ─── ENDPOINT INTERNE (POUR STUDENT-SERVICE) ──────────────────────────────
 router.get('/internal/validate-hierarchy', academicController.internalValidateHierarchy);
+router.post('/internal/etudiants', academicController.internalSyncStudentToScolarite);
+
+// ─── ENDPOINT PUBLIC POUR CRÉER UN ÉTUDIANT ET LE SYNCHRONISER DANS SCOLARITÉ ─
+router.post('/etudiants', academicController.creerEtudiant);
 
 // ─── NOTES D'EXAMENS ────────────────────────────────────────────────────────
 router.post('/notes', academicController.creerNote);

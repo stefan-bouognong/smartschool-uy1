@@ -62,6 +62,7 @@ async function main() {
         "src",
         "database",
         "models",
+        "index.js",
       ),
     },
     {
@@ -76,6 +77,7 @@ async function main() {
         "src",
         "database",
         "models",
+        "index.js",
       ),
     },
     {
@@ -90,6 +92,7 @@ async function main() {
         "src",
         "database",
         "models",
+        "index.js",
       ),
     },
     {
@@ -104,6 +107,7 @@ async function main() {
         "src",
         "database",
         "models",
+        "index.js",
       ),
     },
     {
@@ -118,6 +122,7 @@ async function main() {
         "src",
         "database",
         "models",
+        "index.js",
       ),
     },
   ];

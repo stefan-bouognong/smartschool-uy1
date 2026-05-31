@@ -31,6 +31,40 @@ exports.internalValidateHierarchy = async (req, res) => {
   }
 };
 
+exports.internalSyncStudentToScolarite = async (req, res) => {
+  try {
+    const data = await academicService.syncStudentToScolarite(req.body);
+    return res.status(200).json({
+      success: true,
+      message: 'Étudiant synchronisé vers le service Scolarité',
+      data
+    });
+  } catch (err) {
+    console.error('❌ Erreur synchronisation vers Scolarité :', err.message);
+    return res.status(400).json({
+      success: false,
+      error: err.message
+    });
+  }
+};
+
+exports.creerEtudiant = async (req, res) => {
+  try {
+    const data = await academicService.syncStudentToScolarite(req.body);
+    return res.status(201).json({
+      success: true,
+      message: 'Étudiant créé dans le service Scolarité via Academic',
+      data
+    });
+  } catch (err) {
+    console.error('❌ Erreur création étudiant Academic->Scolarité :', err.message);
+    return res.status(400).json({
+      success: false,
+      error: err.message
+    });
+  }
+};
+
 // ─── NOTES D'EXAMENS ────────────────────────────────────────────────────────
 exports.creerNote = async (req, res) => {
   try {

@@ -29,7 +29,7 @@ exports.creerInscription = async ({ nom, prenom, email, filiere, niveau }) => {
     
     let academicData;
     try {
-      const response = await academicClient.get('/api/academic/internal/validate-hierarchy', {
+      const response = await academicClient.get('/api/academique/internal/validate-hierarchy', {
         params: { filiere, niveau }
       });
       academicData = response.data.data; // { id_departement, id_niveau, nom_dept, libelle_niveau }
@@ -89,6 +89,97 @@ exports.creerInscription = async ({ nom, prenom, email, filiere, niveau }) => {
       annee: anneeObj.libelle_annee
     };
 
+  } catch (err) {
+    await t.rollback();
+    throw err;
+  }
+};
+
+exports.createOrUpdateEtudiant = async (etudiantData) => {
+  const {
+    email,
+    nom,
+    prenom,
+    matricule,
+    date_naissance,
+    sexe,
+    adresse,
+    filiere,
+    niveau,
+    annee
+  } = etudiantData;
+
+  if (!email) {
+    throw new Error('L\'email est requis pour synchroniser l\'étudiant');
+  }
+
+  const t = await sequelize.transaction();
+  try {
+    const [etudiant, created] = await Etudiant.findOrCreate({
+      where: { email },
+      defaults: {
+        nom_etud: nom,
+        prenom_etud: prenom,
+        matricule,
+        date_naissance,
+        sexe,
+        adresse,
+        email
+      },
+      transaction: t
+    });
+
+    if (!created) {
+      await etudiant.update({
+        nom_etud: nom || etudiant.nom_etud,
+        prenom_etud: prenom || etudiant.prenom_etud,
+        matricule: matricule || etudiant.matricule,
+        date_naissance: date_naissance || etudiant.date_naissance,
+        sexe: sexe || etudiant.sexe,
+        adresse: adresse || etudiant.adresse
+      }, { transaction: t });
+    }
+
+    let inscription = null;
+    if (filiere && niveau) {
+      const response = await academicClient.get('/api/academique/internal/validate-hierarchy', {
+        params: { filiere, niveau }
+      });
+      const hierarchy = response.data.data;
+      if (!hierarchy || !hierarchy.id_niveau) {
+        throw new Error('Filière ou niveau introuvable dans le service académique');
+      }
+
+      const anneeLibelle = annee || '2025-2026';
+      const anneeObj = await Annee.findOne({ where: { libelle_annee: anneeLibelle }, transaction: t });
+      if (!anneeObj) {
+        throw new Error(`Année académique "${anneeLibelle}" non configurée dans la base de scolarité`);
+      }
+
+      const existingInscription = await Inscription.findOne({
+        where: {
+          id_etudiant: etudiant.id_etudiant,
+          id_niveau: hierarchy.id_niveau,
+          id_annee: anneeObj.id_annee
+        },
+        transaction: t
+      });
+
+      if (!existingInscription) {
+        const generatedMatricule = await genererMatricule(filiere, niveau, hierarchy.id_niveau, anneeObj.id_annee);
+        inscription = await Inscription.create({
+          matricule: generatedMatricule,
+          id_etudiant: etudiant.id_etudiant,
+          id_annee: anneeObj.id_annee,
+          id_niveau: hierarchy.id_niveau
+        }, { transaction: t });
+      } else {
+        inscription = existingInscription;
+      }
+    }
+
+    await t.commit();
+    return { etudiant, inscription };
   } catch (err) {
     await t.rollback();
     throw err;
