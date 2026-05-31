@@ -34,7 +34,7 @@ exports.creerNote = async (req, res) => {
   try {
     const donneesNote = {
       ...req.body,
-      id_enseignant: req.user.id_enseignant || req.body.id_enseignant
+      id_enseignant: req.user?.id_enseignant || req.body.id_enseignant
     };
     const noteCree = await service.creerNote(donneesNote);
     res.status(201).json(noteCree);
@@ -71,7 +71,7 @@ exports.obtenirNoteParId = async (req, res) => {
 
 exports.listerNotesPourEnseignant = async (req, res) => {
   try {
-    const idEnseignant = req.user.id_enseignant;
+    const idEnseignant = req.user?.id_enseignant;
     if (!idEnseignant) {
       return res.status(403).json({ message: 'Accès réservé aux enseignants' });
     }
